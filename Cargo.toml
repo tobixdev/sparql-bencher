@@ -1,8 +1,9 @@
 [workspace]
 members = [
     "lib/benchmarks",
+    "lib/common",
     "lib/engines",
-    "cli"
+    "cli",
 ]
 resolver = "2"
 
@@ -11,7 +12,7 @@ version = "0.1.0"
 authors = ["Tobias Schwarzinger <tobias.schwarzinger@tuwien.ac.at>"]
 license = "MIT OR Apache-2.0"
 edition = "2024"
-rust-version = "1.80"
+rust-version = "1.85"
 
 [workspace.dependencies]
 anyhow = "1.0"
