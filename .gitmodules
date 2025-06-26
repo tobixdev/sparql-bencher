@@ -1,0 +1,3 @@
+[submodule "bsbm/bsbm-tools"]
+	path = bsbm/bsbm-tools
+	url = https://github.com/Tpt/bsbm-tools
