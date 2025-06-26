@@ -1,40 +1,48 @@
 use reqwest::Url;
 use std::path::PathBuf;
 
+/// The implementation of a requirement.
+pub trait Requirement {
+    /// Prepares the requirement in the given context.
+    fn prepare(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()>;
+
+    /// Checks the requirement in the given context.
+    /// 
+    /// Returns `Ok(())` if the requirement is fulfilled, otherwise an error with a descriptive message.
+    fn check(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()>;
+
+    /// Ensures that the requirement is fulfilled in the given context.
+    /// 
+    /// If the requirement is already fulfilled (see [Self::check]), this method does not prepare.
+    fn ensure(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()> {
+        if self.check(ctx).is_ok() {
+            Ok(())
+        } else {
+            self.prepare(ctx)
+        }
+    }
+}
+
 /// Defines a requirement of preparing for a benchmark.
 pub enum PrepRequirement {
     /// Requires that a file is downloaded at a given (relative) path.
-    FileDownload {
-        /// The URL that can be used to download the file.
-        url: Url,
-        /// The file name of the resulting file.
-        file_name: PathBuf,
-        /// An optional action that is applied to the downloaded file.
-        action: Option<FileDownloadAction>,
-    },
+    FileDownload(FileDownloadRequirement),
     /// Runs a command.
-    RunCommand {
-        /// The working directory.
-        workdir: PathBuf,
-        /// The program to run.
-        program: String,
-        /// The args for the program.
-        args: Vec<String>,
-        /// A checking function that can be used to check if the requirement is fulfilled.
-        check_requirement: Box<dyn Fn() -> anyhow::Result<bool>>,
-    },
+    RunCommand(RunCommandRequirement),
 }
 
-/// Represents an action that is applied to a downloaded file.
-pub enum FileDownloadAction {
-    /// Unpacks a file after it has been downloaded.
-    Unpack(ArchiveType),
-}
+impl Requirement for PrepRequirement {
+    fn prepare(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()> {
+        match self {
+            PrepRequirement::FileDownload(req) => req.prepare(ctx),
+            PrepRequirement::RunCommand(req) => req.prepare(ctx),
+        }
+    }
 
-/// Represents the type of archive.
-pub enum ArchiveType {
-    /// A .bz2 archive.
-    Bz2,
-    /// A .zip archive.
-    Zip,
+    fn check(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()> {
+        match self {
+            PrepRequirement::FileDownload(req) => req.check(ctx),
+            PrepRequirement::RunCommand(req) => req.check(ctx),
+        }
+    }
 }

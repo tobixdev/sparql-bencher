@@ -1,7 +1,5 @@
-pub mod file_download;
-pub mod requirement;
-pub mod run_command;
+mod requirements;
+mod requirement;
 
-pub use file_download::*;
+pub use requirements::*;
 pub use requirement::*;
-pub use run_command::*;

@@ -10,17 +10,53 @@ use std::io::{Cursor, Read};
 use std::path::{Path, PathBuf};
 use std::{fs, path};
 
-pub fn ensure_file_download(ctx: &SparqlBencherContext, file_name: &Path) -> anyhow::Result<()> {
-    let file_path = ctx.join_data_dir(file_name)?;
-    if !file_path.exists() {
-        bail!(
-            "{:?} does not exist ({:?})",
-            &file_path,
-            &path::absolute(&file_path)
-        );
-    }
-    Ok(())
+/// Represents an action that is applied to a downloaded file.
+pub struct FileDownloadRequirement {
+    /// The URL that can be used to download the file.
+    pub url: Url,
+    /// The file name of the resulting file.
+    pub file_name: PathBuf,
+    /// An optional action that is applied to the downloaded file.
+    pub action: Option<FileDownloadAction>,
 }
+
+/// Represents an action that is applied to a downloaded file.
+pub enum FileDownloadAction {
+    /// Unpacks a file after it has been downloaded.
+    Unpack(ArchiveType),
+}
+
+/// Represents the type of archive.
+pub enum ArchiveType {
+    /// A .bz2 archive.
+    Bz2,
+    /// A .zip archive.
+    Zip,
+}
+
+impl Requirement for FileDownloadRequirement {
+    fn prepare(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()> {
+        prepare_file_download(
+            &ctx.rdf_fusion_bench_context,
+            self.url.clone(),
+            self.file_name.clone(),
+            self.action.clone(),
+        )
+    }
+
+    fn check(&self, ctx: &SparqlBencherContext) -> anyhow::Result<()> {
+        let file_path = ctx.join_data_dir(file_name)?;
+        if !file_path.exists() {
+            bail!(
+                "{:?} does not exist ({:?})",
+                &file_path,
+                &path::absolute(&file_path)
+            );
+        }
+        Ok(())
+    }
+}
+
 
 /// Downloads a file from the given url and executes a possible `action` afterward
 /// (e.g., Extract Archive).
