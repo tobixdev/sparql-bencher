@@ -1,9 +1,15 @@
-# rdf-fusion-bench
+SPARQL Bencher
+==============
 
-Compares [RDF Fusion](https://github.com/tobixdev/rdf-fusion) to other SPARQL Engines.
+A CLI tool for comparing the performance of SPARQL engines.
 
-This repository should only contain comparisons with other engines using external test runners that use the API endpoints.
-Benchmarks that directly use parts of RDF Fusion or do not aim to compare with other engines should be part of the main repository.
+The goals of this tool is twofold:
+- Allows creating and managing instances of different SPARQL engines
+- Allows preparing and running SPARQL benchmarks
+
+Supported SPARQL Engines:
+- [RDF Fusion](https://github.com/tobixdev/rdf-fusion)
+- [Oxigraph](https://oxigraph.org/)
 
 Benchmarks:
 - [Berlin SPARQL Benchmark (BSBM)](http://wifo5-03.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/)
