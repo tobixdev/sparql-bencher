@@ -1,5 +1,5 @@
 [package]
-name = "engines"
+name = "sparql-bencher-engines"
 version.workspace = true
 authors.workspace = true
 license.workspace = true

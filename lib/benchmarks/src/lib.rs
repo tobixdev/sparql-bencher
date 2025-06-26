@@ -1,14 +1,10 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub mod bsbm;
+mod benchmark_suite_id;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub use benchmark_suite_id::BenchmarkSuiteId;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+/// Represents a benchmark.
+pub trait SparqlBench {
+    /// Returns the [BenchmarkSuiteId] of the benchmark.
+    fn name(&self) -> BenchmarkSuiteId;
 }

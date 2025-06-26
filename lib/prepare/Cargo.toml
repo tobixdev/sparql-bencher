@@ -1,5 +1,5 @@
 [package]
-name = "sparql-bencher-benchmarks"
+name = "prepare"
 version.workspace = true
 authors.workspace = true
 license.workspace = true
@@ -7,4 +7,5 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+anyhow.workspace = true
 sparql-bencher-common.workspace = true

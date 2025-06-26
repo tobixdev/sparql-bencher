@@ -3,7 +3,7 @@ members = [
     "lib/benchmarks",
     "lib/common",
     "lib/engines",
-    "cli",
+    "cli", "lib/prepare",
 ]
 resolver = "2"
 
@@ -19,3 +19,8 @@ anyhow = "1.0"
 clap = "4.0"
 clap_complete = "4.0"
 clap_mangen = "0.2.19"
+
+# Internal Dependencies
+sparql-bencher-common = { version = "0.1.0", path = "lib/common" }
+sparql-bencher-benchmarks = { version = "0.1.0", path = "lib/benchmarks" }
+sparql-bencher-engines = { version = "0.1.0", path = "lib/engines" }
