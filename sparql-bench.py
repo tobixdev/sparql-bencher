@@ -5,6 +5,7 @@ Loads configuration, orchestrates Podman containers, and runs benchmarks.
 """
 import os
 import sys
+import shutil
 from sparql_bench.config import load_config
 from sparql_bench.runner import run_benchmarks
 
@@ -23,7 +24,7 @@ def main():
         os.remove("work/command.log")
     
     if os.path.exists("work/results"):
-        os.remove("work/results")
+        shutil.rmtree('work/results')
         
     run_benchmarks(config)
 

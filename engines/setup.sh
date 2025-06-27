@@ -27,7 +27,7 @@ case "$ENGINE_NAME" in
   rep:repositoryImpl [
     rep:repositoryType "openrdf:SailRepository" ;
     sr:sailImpl [
-      sail:sailType "rdf4j:LmdbStore"
+      sail:sailType "rdf4j:MemoryStore"
     ]
   ] .
 '
