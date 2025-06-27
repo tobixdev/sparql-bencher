@@ -1,7 +1,7 @@
 SPARQL Bencher
 ==============
 
-A CLI tool for comparing the performance of SPARQL engines.
+A CLI tool for comparing the performance of SPARQL engines with the primary goal of benchmarking [RDF Fusion](https://github.com/tobixdev/rdf-fusion).
 
 The goals of this tool is twofold:
 - Allows creating and managing instances of different SPARQL engines
