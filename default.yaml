@@ -1,0 +1,13 @@
+engines:
+  - name: Oxigraph
+    image: ghcr.io/oxigraph/oxigraph:0.4.11
+
+benchmarks:
+  - name: BSBM
+    build:
+      context: ./benchmarks/bsbm/
+      args:
+        - NUMBER_OF_PRODUCTS=10000
+    use_cases:
+      - name: Explore 10k, 16 parallel
+        command_args: ["explore", "Oxigraph_0.4.11", "10000", "16", "http://localhost:7878/"]

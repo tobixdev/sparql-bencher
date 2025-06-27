@@ -1,0 +1,15 @@
+FROM docker.io/eclipse-temurin:21
+
+ARG NUMBER_OF_PRODUCTS
+
+RUN apt-get update && apt-get install -y git
+
+RUN git clone https://github.com/Tpt/bsbm-tools.git /bsbm/bsbm-tools 
+RUN mkdir /bsbm/data
+
+WORKDIR /bsbm/bsbm-tools
+RUN ./generate -fc -pc $NUMBER_OF_PRODUCTS -s nt -dir ../data -fn "../data/explore-${NUMBER_OF_PRODUCTS}" -ud -ufn "../data/explore-update-${NUMBER_OF_PRODUCTS}"
+
+COPY /entrypoint.sh /bsbm/entrypoint.sh
+WORKDIR /bsbm
+ENTRYPOINT [ "/bsbm/entrypoint.sh" ]

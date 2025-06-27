@@ -1,0 +1,11 @@
+ARG BRANCH=main
+
+FROM docker.io/rust:1.88-bookworm AS builder
+ARG BRANCH
+RUN git clone --branch $BRANCH --single-branch https://github.com/tobixdev/rdf-fusion.git /rdf-fusion
+RUN cargo build --release --manifest-path /rdf-fusion/Cargo.toml
+
+FROM gcr.io/distroless/cc-debian12
+COPY --from=builder /rdf-fusion/target/release/rdf-fusion /usr/local/bin/rdf-fusion
+ENTRYPOINT [ "/usr/local/bin/rdf-fusion" ]
+CMD [ "serve", "--bind", "0.0.0.0:7878" ]
