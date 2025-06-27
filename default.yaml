@@ -1,8 +1,22 @@
 engines:
+  - name: jena-fuseki-5.4.0
+    build:
+      context: ./engines/jena-fuseki/
+      args:
+        - JENA_VERSION=5.4.0
+    run:
+      args: ["--mem", "--update", "--port", "7878", "/bsbm"]
+    query_url: "http://localhost:7878/bsbm/query"
+    update_url: "http://localhost:7878/bsbm/update"
+    upload_url: "http://localhost:7878/bsbm/data"
+
   - name: oxigraph-memory-0.4.11
     image: ghcr.io/oxigraph/oxigraph:0.4.11
     run:
       args: ["serve", "--location", "0.0.0.0:7878"]
+    query_url: "http://localhost:7878/query"
+    update_url: "http://localhost:7878/update"
+    upload_url: "http://localhost:7878/store?no_transaction"
 
 benchmarks:
   - name: BSBM
@@ -11,6 +25,6 @@ benchmarks:
       args:
         - NUMBER_OF_PRODUCTS=10000
     use_cases:
-      - name: Explore 10k, 16 parallel
+      - name: explore-16
         command_args:
-          ["explore", "10000", "16", "http://localhost:7878"]
+          ["explore", "10000", "16"]

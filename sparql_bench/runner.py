@@ -71,6 +71,9 @@ def run_benchmarks(config: BencherConfig):
                             "prepare",
                             engine.name,
                             *use_case.command_args,
+                            engine.query_url,
+                            engine.update_url,
+                            engine.upload_url,
                         ],
                     )
 
@@ -98,6 +101,9 @@ def run_benchmarks(config: BencherConfig):
                             "execute",
                             engine.name,
                             *use_case.command_args,
+                            engine.query_url,
+                            engine.update_url,
+                            engine.upload_url,
                         ],
                     )
 
