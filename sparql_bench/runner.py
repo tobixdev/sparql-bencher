@@ -26,16 +26,16 @@ def run_benchmarks(config: BencherConfig):
         benchmark_images[benchmark.name] = obtain_image(benchmark.name, benchmark)
 
     # For each combination, create and run containers
-    for engine in config.engines:
-        for benchmark in config.benchmarks:
+    for benchmark in config.benchmarks:
+        benchmark_image = benchmark_images[benchmark.name]
+        pod_name = "sparql-bench"
+
+        for use_case in benchmark.use_cases:
             logging.info(f"\n=== Running {benchmark.name} on {engine.name} ===")
-            engine_image = engine_images[engine.name]
-            benchmark_image = benchmark_images[benchmark.name]
-
-            pod_name = "sparql-bench"
-
-            for use_case in benchmark.use_cases:
+            
+            for engine in config.engines:
                 logging.info(f"Running use case: {use_case.name}")
+                engine_image = engine_images[engine.name]
 
                 logging.info(
                     f"Creating pod '{pod_name}' for benchmark '{benchmark.name}'"
@@ -119,19 +119,15 @@ def run_benchmarks(config: BencherConfig):
                     remove_pod(pod_name)
                 
                     
-                # Analyze results of the use case
-                run_container(
-                    image=benchmark_image,
-                    volumes = {results_dir: "/results"},
-                    args=[
-                        "analyze",
-                        engine.name,
-                        *use_case.command_args,
-                        engine.query_url,
-                        engine.update_url,
-                        engine.upload_url,
-                    ],
-                )
+            # Analyze results of the use case
+            run_container(
+                image=benchmark_image,
+                volumes = {results_dir: "/results"},
+                args=[
+                    "analyze",
+                    *use_case.command_args,
+                ],
+            )
 
 
 # Instantiate a global command runner for this module (if needed for future direct calls)

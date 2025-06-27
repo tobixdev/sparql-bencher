@@ -20,6 +20,7 @@ case "$ENGINE_NAME" in
 @prefix rep: <http://www.openrdf.org/config/repository#>.
 @prefix sr: <http://www.openrdf.org/config/repository/sail#>.
 @prefix sail: <http://www.openrdf.org/config/sail#>.
+@prefix config: <tag:rdf4j.org,2023:config/>.
 
 [] a rep:Repository ;
   rep:repositoryID "bench" ;
@@ -27,7 +28,9 @@ case "$ENGINE_NAME" in
   rep:repositoryImpl [
     rep:repositoryType "openrdf:SailRepository" ;
     sr:sailImpl [
-      sail:sailType "rdf4j:MemoryStore"
+        config:sail.type "openrdf:MemoryStore" ;
+        config:mem.persist false;
+        config:mem.syncDelay 0;
     ]
   ] .
 '

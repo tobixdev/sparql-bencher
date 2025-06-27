@@ -37,7 +37,8 @@ def plot_usecase(results_dir, name):
                     if val > 0:
                         aqet[run][query_id] = val
                 elif child.tag == "avgresults":
-                    avgresults_by_query[query_id][int(parts[-3])][run] = float(query.find('avgresults').text)
+                    # TDOO load size
+                    avgresults_by_query[query_id][10000][run] = float(query.find('avgresults').text)
     plot_y_per_x_per_plot(aqet, 'Query', 'Average Query Execution Time (s)', f"{results_dir}/{name}/bsbm.{name}.svg")
 
     # we check if avgresults seems consistent
