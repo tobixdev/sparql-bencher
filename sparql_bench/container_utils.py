@@ -6,9 +6,9 @@ from .command_runner import CommandRunner
 command_runner = CommandRunner()
 
 
-def run_container_in_pod(
-    pod_name: str,
+def run_container(
     image: str,
+    pod_name: Optional[str] = None,
     name: Optional[str] = None,
     volumes: Optional[Dict[str, str]] = None,
     args: list = None,
@@ -17,7 +17,10 @@ def run_container_in_pod(
     """
     Run a container in the specified pod.
     """
-    cmd = ["podman", "run", "--rm", "--pod", pod_name]
+    cmd = ["podman", "run", "--rm"]
+    
+    if pod_name:
+        cmd += ["--pod", pod_name]
 
     if name:
         cmd += ["--name", name]

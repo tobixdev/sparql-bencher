@@ -6,7 +6,7 @@ import logging
 import random
 from .config import BencherConfig
 from .image_utils import create_pod, obtain_image, remove_pod
-from .container_utils import run_container_in_pod
+from .container_utils import run_container
 from .command_runner import CommandRunner
 import time
 import os
@@ -51,9 +51,9 @@ def run_benchmarks(config: BencherConfig):
                     if engine.run is not None:
                         engine_run_args = engine.run.args
 
-                    run_container_in_pod(
-                        pod_name=pod_name,
+                    run_container(
                         image=engine_image,
+                        pod_name=pod_name,
                         name=f"{engine.name.lower()}-{random.randint(1000, 9999)}",
                         args=engine_run_args,
                         detach=True,
@@ -64,9 +64,9 @@ def run_benchmarks(config: BencherConfig):
                     logging.info(
                         f"Running prepare step for benchmark '{benchmark.name}'"
                     )
-                    run_container_in_pod(
-                        pod_name=pod_name,
+                    run_container(
                         image=benchmark_image,
+                        pod_name=pod_name,
                         args=[
                             "prepare",
                             engine.name,
@@ -89,14 +89,10 @@ def run_benchmarks(config: BencherConfig):
                         )
                     )
                     os.makedirs(results_dir, exist_ok=True)
-                    # Compose the volume mount argument
-                    volumes = {results_dir: "/results"}
-
-                    # Add volume mount for results
-                    run_container_in_pod(
-                        pod_name=pod_name,
-                        volumes=volumes,
+                    run_container(
                         image=benchmark_image,
+                        pod_name=pod_name,
+                        volumes = {results_dir: "/results"},
                         args=[
                             "execute",
                             engine.name,
@@ -113,6 +109,21 @@ def run_benchmarks(config: BencherConfig):
                 finally:
                     logging.info(f"Cleaning up pod '{pod_name}'")
                     remove_pod(pod_name)
+                
+                    
+                # Analyze results of the use case
+                run_container(
+                    image=benchmark_image,
+                    volumes = {results_dir: "/results"},
+                    args=[
+                        "analyze",
+                        engine.name,
+                        *use_case.command_args,
+                        engine.query_url,
+                        engine.update_url,
+                        engine.upload_url,
+                    ],
+                )
 
 
 # Instantiate a global command runner for this module (if needed for future direct calls)

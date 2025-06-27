@@ -27,4 +27,4 @@ benchmarks:
     use_cases:
       - name: explore-16
         command_args:
-          ["explore", "10000", "16"]
+          ["explore", "16"]

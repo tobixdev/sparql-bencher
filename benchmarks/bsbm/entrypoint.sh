@@ -3,7 +3,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 {prepare | execute} <engine> {explore | explore-and-update | business-intelligence} <dataset_size> <parallelism> <query_url> <update_url> <upload_url>"
+  echo "Usage: $0 {prepare | execute | analyze} <engine> {explore | explore-and-update | business-intelligence} <dataset_size> <parallelism> <query_url> <update_url> <upload_url>"
   echo "  <engine>: Identifier for the engine"
   echo "  <dataset_size>: Size of the dataset (e.g., 1000, 10000)"
   echo "  <parallelism>: Number of parallel clients/threads (e.g., 1, 4, 8)"
@@ -17,14 +17,15 @@ if [[ $# -lt 2 ]]; then
   usage
 fi
 
+DATASET_SIZE=$(cat /bsbm/number_of_products.txt)
+
 COMMAND="$1"
 ENGINE="$2"
-USECASE="$3"
-DATASET_SIZE="$4"
-PARALLELISM="$5"
-QUERY_URL="$6"
-UPDATE_URL="$7"
-UPLOAD_URL="$8"
+USE_CASE="$3"
+PARALLELISM="$4"
+QUERY_URL="$5"
+UPDATE_URL="$6"
+UPLOAD_URL="$7"
 
 case "$COMMAND" in
   prepare)
@@ -34,10 +35,10 @@ case "$COMMAND" in
     mkdir -p results
     cd bsbm-tools
 
-    RESULTS_FILE_NAME="bsbm.${USECASE}.${ENGINE}.${DATASET_SIZE}.${PARALLELISM}.xml"
+    RESULTS_FILE_NAME="bsbm.${USE_CASE}.${ENGINE}.${DATASET_SIZE}.${PARALLELISM}.xml"
     RESULTS_FILE="../results/$RESULTS_FILE_NAME"
 
-    case "$USECASE" in
+    case "$USE_CASE" in
       explore)
         ./testdriver -idir "../data" -mt "${PARALLELISM}" -ucf usecases/explore/sparql.txt -o $RESULTS_FILE $QUERY_URL
         ;;
@@ -48,13 +49,21 @@ case "$COMMAND" in
         ./testdriver -idir "../data" -mt "${PARALLELISM}" -ucf usecases/businessIntelligence/sparql.txt -o $RESULTS_FILE $QUERY_URL
         ;;
       *)
-        echo "Unknown usecase: $USECASE"
+        echo "Unknown usecase: $USE_CASE"
         usage
         ;;
     esac
     echo "finished"
-    cp $RESULTS_FILE "/results/$RESULTS_FILE_NAME"
+
+    mkdir -p "/results/${USE_CASE}"
+    cp $RESULTS_FILE "/results/${USE_CASE}/${ENGINE}.xml"
+
     ;;
+  analyze)
+    # Assuming analyze.py is a script that processes the results XML file
+    python3 /bsbm/analyze.py "/results" $USE_CASE
+    ;;
+
   *)
     echo "Unknown command: $COMMAND"
     usage
