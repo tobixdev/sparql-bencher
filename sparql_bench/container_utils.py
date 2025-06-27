@@ -10,6 +10,7 @@ def run_container_in_pod(
     pod_name: str,
     image: str,
     name: Optional[str] = None,
+    volumes: Optional[Dict[str, str]] = None,
     args: list = None,
     detach: bool = False,
 ) -> str:
@@ -22,6 +23,10 @@ def run_container_in_pod(
         cmd += ["--name", name]
     else:
         name = f"{image}-container"
+    
+    if volumes:
+        for host_path, container_path in volumes.items():
+            cmd += ["--volume", f"{host_path}:{container_path}"]
 
     if detach:
         cmd.append("-d")

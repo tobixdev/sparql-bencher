@@ -9,10 +9,14 @@ class BuildConfig(BaseModel):
     context: str
     args: Optional[List[str]] = None
 
+class EngineRunConfig(BaseModel):
+    args: Optional[List[str]] = None
+
 class EngineConfig(BaseModel):
     name: str
     image: Optional[str] = None
     build: Optional[BuildConfig] = None
+    run: Optional[EngineRunConfig] = None
 
     @model_validator(mode="after")
     def check_image_or_build(self):

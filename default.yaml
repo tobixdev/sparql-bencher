@@ -1,6 +1,8 @@
 engines:
-  - name: Oxigraph
+  - name: oxigraph-memory-0.4.11
     image: ghcr.io/oxigraph/oxigraph:0.4.11
+    run:
+      args: ["serve", "--location", "0.0.0.0:7878"]
 
 benchmarks:
   - name: BSBM
@@ -10,4 +12,5 @@ benchmarks:
         - NUMBER_OF_PRODUCTS=10000
     use_cases:
       - name: Explore 10k, 16 parallel
-        command_args: ["explore", "Oxigraph_0.4.11", "10000", "16", "http://localhost:7878"]
+        command_args:
+          ["explore", "10000", "16", "http://localhost:7878"]
