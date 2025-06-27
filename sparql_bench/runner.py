@@ -7,8 +7,8 @@ import random
 from .config import BencherConfig
 from .image_utils import create_pod, obtain_image, remove_pod
 from .container_utils import run_container_in_pod
+from .command_runner import CommandRunner
 import time
-import subprocess
 
 
 def run_benchmarks(config: BencherConfig):
@@ -82,3 +82,6 @@ def run_benchmarks(config: BencherConfig):
                 finally: 
                     logging.info(f"Cleaning up pod '{pod_name}'")
                     remove_pod(pod_name)
+
+# Instantiate a global command runner for this module (if needed for future direct calls)
+command_runner = CommandRunner()

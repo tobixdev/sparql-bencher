@@ -1,6 +1,9 @@
 import subprocess
 import logging
 from typing import Optional, Dict
+from .command_runner import CommandRunner
+
+command_runner = CommandRunner()
 
 
 def run_container_in_pod(
@@ -30,7 +33,7 @@ def run_container_in_pod(
 
     logging.info(f"Running container with command: {' '.join(cmd)}")
     try:
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, check=True)
+        result = command_runner.run(cmd, stdout=subprocess.PIPE, check=True)
         logging.info(f"Container '{name}' started in pod '{pod_name}'.")
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:

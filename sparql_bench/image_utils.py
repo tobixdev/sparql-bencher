@@ -5,8 +5,12 @@ from .config import BuildConfig
 import os
 import yaml
 import hashlib
+from .command_runner import CommandRunner
 
 CACHE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'work', 'cache.yml')
+
+# Instantiate a global command runner for this module
+command_runner = CommandRunner()
 
 def _load_cache():
     if not os.path.exists(CACHE_PATH):
@@ -73,7 +77,7 @@ def pull_image(name: str, image: str) -> str:
     cmd += ["pull", image]
     logging.info(f"Pulling image with command: {' '.join(cmd)}")
     try:
-        subprocess.run(cmd, check=True)
+        command_runner.run(cmd, check=True)
         logging.info("Image pulled successfully.")
         set_cached_image_id(name, { image: image }, image)
         return image
@@ -102,7 +106,7 @@ def build_image(name: str, build_config: BuildConfig) -> str:
     cmd += [build_config.context]
     logging.info(f"Building image with command: {' '.join(cmd)}")
     try:
-        result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        result = command_runner.run(cmd, check=True, capture_output=True, text=True)
         logging.info("Image built successfully.")
         
         image_id = result.stdout.splitlines()[-1].strip()
@@ -145,7 +149,7 @@ def create_pod(pod_name: str) -> None:
 
     logging.info(f"Creating pod with command: {' '.join(cmd)}")
     try:
-        subprocess.run(cmd, check=True)
+        command_runner.run(cmd, check=True)
         logging.info(f"Pod '{pod_name}' created.")
     except subprocess.CalledProcessError as e:
         logging.error(f"Pod creation failed: {e}")
@@ -156,7 +160,7 @@ def remove_pod(pod_name: str) -> None:
     Remove the specified pod and all its containers.
     """
     try:
-        subprocess.run(["podman", "pod", "rm", "-f", pod_name], check=True)
+        command_runner.run(["podman", "pod", "rm", "-f", pod_name], check=True)
         logging.info(f"Pod '{pod_name}' removed.")
     except subprocess.CalledProcessError as e:
         logging.error(f"Pod removal failed: {e}")

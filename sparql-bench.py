@@ -18,6 +18,10 @@ def main():
     
     if not os.path.exists("work"):
         os.mkdir("work")
+    
+    if os.path.exists("work/command.log"):
+        os.remove("work/command.log")
+        
     run_benchmarks(config)
 
 if __name__ == "__main__":
