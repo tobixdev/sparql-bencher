@@ -28,7 +28,7 @@ ARG FUSEKI_JAR=jena-fuseki-server-${JENA_VERSION}.jar
 ARG JAVA_MINIMAL=/opt/java-minimal
 
 ## ---- Stage: Download and build java.
-FROM eclipse-temurin:${JAVA_VERSION}-alpine AS base
+FROM docker.io/eclipse-temurin:${JAVA_VERSION}-alpine AS base
 
 ARG JAVA_MINIMAL
 ARG JENA_VERSION
@@ -113,7 +113,7 @@ RUN \
 ## Default environment variables.
 ENV \
     JAVA_HOME=${JAVA_MINIMAL}           \
-    JAVA_OPTIONS="-Xmx2048m -Xms2048m"  \
+    JAVA_OPTIONS="-Xmx8192m -Xms8192m"  \
     JENA_VERSION=${JENA_VERSION}        \
     FUSEKI_JAR="${FUSEKI_JAR}"          \
     FUSEKI_DIR="${FUSEKI_DIR}"
