@@ -21,6 +21,9 @@ def main():
     
     if os.path.exists("work/command.log"):
         os.remove("work/command.log")
+    
+    if os.path.exists("work/results"):
+        os.remove("work/results")
         
     run_benchmarks(config)
 

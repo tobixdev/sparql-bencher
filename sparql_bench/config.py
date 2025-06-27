@@ -17,9 +17,11 @@ class EngineConfig(BaseModel):
     image: Optional[str] = None
     build: Optional[BuildConfig] = None
     run: Optional[EngineRunConfig] = None
+    boot_time_s: int = 5
     query_url: str = None
     update_url: str = None
     upload_url: str = None
+    port: Optional[int] = None
 
     @model_validator(mode="after")
     def check_image_or_build(self):

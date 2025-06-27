@@ -141,12 +141,13 @@ def check_unique_names(config):
     if duplicates:
         raise ValueError(f"Duplicate engine/benchmark names found: {', '.join(duplicates)}")
 
-def create_pod(pod_name: str) -> None:
+def create_pod(pod_name: str, port: Optional[int] = None) -> None:
     """
     Create a pod with the given name and optional port mappings.
     """
     cmd = ["podman", "pod", "create", "--name", pod_name]
-
+    if port:
+        cmd += ["-p", f"{port}:{port}"]
     logging.info(f"Creating pod with command: {' '.join(cmd)}")
     try:
         command_runner.run(cmd, check=True)

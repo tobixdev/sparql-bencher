@@ -40,7 +40,7 @@ def run_benchmarks(config: BencherConfig):
                 logging.info(
                     f"Creating pod '{pod_name}' for benchmark '{benchmark.name}'"
                 )
-                create_pod(pod_name)
+                create_pod(pod_name, engine.port)
 
                 try:
                     # Start engine container
@@ -58,7 +58,15 @@ def run_benchmarks(config: BencherConfig):
                         args=engine_run_args,
                         detach=True,
                     )
-                    time.sleep(2)  # Give engine time to start
+                    time.sleep(engine.boot_time_s)
+
+                    # Engine-specific setup step
+                    setup_script = os.path.join(os.path.dirname(__file__), "..", "engines", "setup.sh")
+                    if os.path.isfile(setup_script):
+                        command_runner = CommandRunner()
+                        command_runner.run([setup_script, engine.name], check=True)
+                    else:
+                        logging.warning(f"Setup script not found: {setup_script}")
 
                     # Run benchmark prepare step
                     logging.info(

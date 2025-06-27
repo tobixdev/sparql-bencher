@@ -28,8 +28,7 @@ def plot_usecase(results_dir, name):
     aqet = defaultdict(dict)
     avgresults_by_query = defaultdict(lambda: defaultdict(dict))
     for file in glob(f'{results_dir}/{name}/*.xml'):
-        parts = file.split('.')
-        run = '.'.join(parts[2:-1])
+        run = file
         for query in ET.parse(file).getroot().find('queries').findall('query'):
             query_id = int(query.attrib['nr'])
             for child in query.iter():
