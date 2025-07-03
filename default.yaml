@@ -31,6 +31,15 @@ engines:
     update_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
     upload_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
 
+  - name: rdf-fusion-main
+    build:
+      context: ./engines/rdf-fusion/
+    run:
+      args: ["serve", "--bind", "0.0.0.0:7878"]
+    query_url: "http://localhost:7878/repositories/default/query"
+    update_url: "http://localhost:7878/repositories/default/update"
+    upload_url: "http://localhost:7878/repositories/default/data"
+
 benchmarks:
   - name: BSBM
     build:
