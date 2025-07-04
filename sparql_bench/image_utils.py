@@ -100,6 +100,8 @@ def build_image(name: str, build_config: BuildConfig) -> str:
 
     cmd = ["podman"]
     cmd += ["build"]
+    cmd += ["--no-cache"]
+    
     if build_config.args:
         for arg in build_config.args:
             cmd += ["--build-arg", arg]

@@ -41,7 +41,7 @@ engines:
     upload_url: "http://localhost:7878/repositories/default/data"
 
 benchmarks:
-  - name: BSBM
+  - name: BSBM Explore (products=10_000, number_of_clients=16)
     build:
       context: ./benchmarks/bsbm/
       args:
@@ -50,3 +50,13 @@ benchmarks:
       - name: explore-16
         command_args:
           ["explore", "16"]
+
+  - name: BSBM Business Intelligence (products=10_000, number_of_clients=16)
+    build:
+      context: ./benchmarks/bsbm/
+      args:
+        - NUMBER_OF_PRODUCTS=10000
+    use_cases:
+      - name: business-intelligence-8
+        command_args:
+          ["business-intelligence", "8"]
