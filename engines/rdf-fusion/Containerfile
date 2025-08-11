@@ -2,6 +2,8 @@ ARG BRANCH=main
 
 FROM docker.io/rust:1.88-bookworm AS builder
 ARG BRANCH
+RUN apt update
+RUN apt install build-essential cmake -y
 RUN git clone --branch $BRANCH --single-branch https://github.com/tobixdev/rdf-fusion.git /rdf-fusion
 RUN cargo build --release --manifest-path /rdf-fusion/Cargo.toml
 
