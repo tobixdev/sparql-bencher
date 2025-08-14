@@ -9,5 +9,6 @@ RUN cargo build --release --manifest-path /rdf-fusion/Cargo.toml --bin rdf-fusio
 
 FROM gcr.io/distroless/cc-debian12
 COPY --from=builder /rdf-fusion/target/release/rdf-fusion /usr/local/bin/rdf-fusion
+
 ENTRYPOINT [ "/usr/local/bin/rdf-fusion" ]
 CMD [ "serve", "--bind", "0.0.0.0:7878" ]
