@@ -93,7 +93,7 @@ def run_benchmarks(config: BencherConfig):
                     # Define results directory for this benchmark/usecase/engine
                     results_dir = os.path.abspath(
                         os.path.join(
-                            os.path.dirname(__file__), "..", "work", "results", "bsbm"
+                            os.path.dirname(__file__), "..", "work", "results", use_case.name
                         )
                     )
                     os.makedirs(results_dir, exist_ok=True)

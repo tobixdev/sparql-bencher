@@ -33,25 +33,25 @@ engines:
     upload_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
 
 benchmarks:
-  # - name: BSBM Explore (products=25_000, number_of_clients=8)
-  #   build:
-  #     context: ./benchmarks/bsbm/
-  #     args:
-  #       - NUMBER_OF_PRODUCTS=25000
-  #   use_cases:
-  #     - name: explore-16
-  #       command_args:
-  #         ["explore", "16"]
+  - name: BSBM Explore (products=25_000, number_of_clients=8)
+    build:
+      context: ./benchmarks/bsbm/
+      args:
+        - NUMBER_OF_PRODUCTS=25000
+    use_cases:
+      - name: explore-16
+        command_args:
+          ["explore", "16"]
 
-  # - name: BSBM Business Intelligence (products=5_000, number_of_clients=8)
-  #   build:
-  #     context: ./benchmarks/bsbm/
-  #     args:
-  #       - NUMBER_OF_PRODUCTS=5000
-  #   use_cases:
-  #     - name: business-intelligence-8
-  #       command_args:
-  #         ["business-intelligence", "8"]
+  - name: BSBM Business Intelligence (products=5_000, number_of_clients=8)
+    build:
+      context: ./benchmarks/bsbm/
+      args:
+        - NUMBER_OF_PRODUCTS=5000
+    use_cases:
+      - name: business-intelligence-8
+        command_args:
+          ["business-intelligence", "8"]
 
   - name: Wind Farm (turbines=16)
     build:

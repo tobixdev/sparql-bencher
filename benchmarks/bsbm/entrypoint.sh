@@ -48,13 +48,13 @@ case "$COMMAND" in
 
     case "$USE_CASE" in
       explore)
-        ./testdriver -idir "../data" -mt "${PARALLELISM}" -ucf usecases/explore/sparql.txt -o $RESULTS_FILE $QUERY_URL
+        ./testdriver -idir "../data" -seed 1234 -mt "${PARALLELISM}" -ucf usecases/explore/sparql.txt -o $RESULTS_FILE $QUERY_URL
         ;;
       explore-and-update)
-        ./testdriver -idir "../data" -mt "${PARALLELISM}" -ucf usecases/exploreAndUpdate/sparql.txt -o $RESULTS_FILE $QUERY_URL -u $UPDATE_URL -udataset "explore-update-${DATASET_SIZE}.nt"
+        ./testdriver -idir "../data" -seed 1234 -mt "${PARALLELISM}" -ucf usecases/exploreAndUpdate/sparql.txt -o $RESULTS_FILE $QUERY_URL -u $UPDATE_URL -udataset "explore-update-${DATASET_SIZE}.nt"
         ;;
       business-intelligence)
-        ./testdriver -idir "../data" -mt "${PARALLELISM}" -ucf usecases/businessIntelligence/sparql.txt -o $RESULTS_FILE $QUERY_URL
+        ./testdriver -idir "../data" -seed 1234 -mt "${PARALLELISM}" -ucf usecases/businessIntelligence/sparql.txt -o $RESULTS_FILE $QUERY_URL
         ;;
       *)
         echo "Unknown usecase: $USE_CASE"

@@ -29,8 +29,16 @@ case "$COMMAND" in
     UPDATE_URL="$5"
     UPLOAD_URL="$6"
 
-    curl -X POST -T "./windfarm.n3" -H "content-type: application/n3" $UPLOAD_URL
-    curl -X POST -T "./timeseries.n3" -H "content-type: application/n3" $UPLOAD_URL
+  case "$ENGINE" in
+    rdf4j-*)
+      curl -X POST -T "./windfarm.ttl" -H "content-type: application/x-turtle" $UPLOAD_URL
+      curl -X POST -T "./timeseries.ttl" -H "content-type: application/x-turtle" $UPLOAD_URL
+    ;;
+
+    *)
+      curl -X POST -T "./windfarm.ttl" -H "content-type: application/turtle" $UPLOAD_URL
+      curl -X POST -T "./timeseries.ttl" -H "content-type: application/turtle" $UPLOAD_URL
+  esac
 
     ;;
   execute)
@@ -43,12 +51,12 @@ case "$COMMAND" in
     RESULTS_FILE_NAME="wind_farm.${ENGINE}.${DATASET_SIZE}.txt"
     RESULTS_FILE="../results/$RESULTS_FILE_NAME"
 
-    ./runner.sh $RESULTS_FILE $QUERY_URL
+    python3 runner.py $RESULTS_FILE $QUERY_URL
 
     echo "finished"
 
     mkdir -p "/results/${USE_CASE}"
-    cp $RESULTS_FILE "/results/${USE_CASE}/${ENGINE}.xml"
+    cp $RESULTS_FILE "/results/${USE_CASE}/${ENGINE}.csv"
 
     ;;
   analyze)
