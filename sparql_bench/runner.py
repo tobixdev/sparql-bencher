@@ -46,16 +46,13 @@ def run_benchmarks(config: BencherConfig):
                     # Start engine container
                     logging.info(f"Starting engine container for {engine.name}")
 
-                    # Start engine container with custom run options if provided
-                    engine_run_args = []
-                    if engine.run is not None:
-                        engine_run_args = engine.run.args
 
                     run_container(
                         image=engine_image,
                         pod_name=pod_name,
                         name=f"{engine.name.lower()}-{random.randint(1000, 9999)}",
-                        args=engine_run_args,
+                        args=engine.run.args,
+                        env=engine.run.env,
                         detach=True,
                     )
                     time.sleep(engine.boot_time_s)

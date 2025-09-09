@@ -1,8 +1,21 @@
 engines:
-  - name: rdf-fusion-main
+  - name: rdf-fusion-0.1.0 (target_partitions=1)
     build:
       context: ./engines/rdf-fusion/
     run:
+      env:
+        DATAFUSION_EXECUTION_TARGET_PARTITIONS: "1"
+      args: ["serve", "--bind", "0.0.0.0:7878"]
+    query_url: "http://localhost:7878/repositories/default/query"
+    update_url: "http://localhost:7878/repositories/default/update"
+    upload_url: "http://localhost:7878/repositories/default/data"
+
+  - name: rdf-fusion-0.1.0 (target_partitions=24)
+    build:
+      context: ./engines/rdf-fusion/
+    run:
+      env:
+        DATAFUSION_EXECUTION_TARGET_PARTITIONS: "24"
       args: ["serve", "--bind", "0.0.0.0:7878"]
     query_url: "http://localhost:7878/repositories/default/query"
     update_url: "http://localhost:7878/repositories/default/update"
@@ -31,27 +44,35 @@ engines:
     query_url: "http://localhost:8080/rdf4j-server/repositories/bench"
     update_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
     upload_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
+  
+  - name: oxigraph-0.4.11
+    image: ghcr.io/oxigraph/oxigraph:0.4.11
+    run:
+      args: ["serve", "--bind", "0.0.0.0:7878"]
+    query_url: "http://localhost:7878/query"
+    update_url: "http://localhost:7878/update"
+    upload_url: "http://localhost:7878/store?no_transaction"
 
 benchmarks:
-  - name: BSBM Explore (products=25_000, number_of_clients=8)
+  - name: BSBM Explore (products=25_000, number_of_clients=24)
     build:
       context: ./benchmarks/bsbm/
       args:
         - NUMBER_OF_PRODUCTS=25000
     use_cases:
-      - name: explore-16
+      - name: explore-24
         command_args:
-          ["explore", "16"]
+          ["explore", "24"]
 
-  - name: BSBM Business Intelligence (products=5_000, number_of_clients=8)
+  - name: BSBM Business Intelligence (products=5_000, number_of_clients=24)
     build:
       context: ./benchmarks/bsbm/
       args:
         - NUMBER_OF_PRODUCTS=5000
     use_cases:
-      - name: business-intelligence-8
+      - name: business-intelligence-24
         command_args:
-          ["business-intelligence", "8"]
+          ["business-intelligence", "24"]
 
   - name: Wind Farm (turbines=16)
     build:

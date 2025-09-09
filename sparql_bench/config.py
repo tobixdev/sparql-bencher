@@ -11,12 +11,13 @@ class BuildConfig(BaseModel):
 
 class EngineRunConfig(BaseModel):
     args: Optional[List[str]] = None
+    env: Optional[dict[str, str]] = None
 
 class EngineConfig(BaseModel):
     name: str
     image: Optional[str] = None
     build: Optional[BuildConfig] = None
-    run: Optional[EngineRunConfig] = None
+    run: EngineRunConfig = None
     boot_time_s: int = 5
     query_url: str = None
     update_url: str = None

@@ -13,6 +13,7 @@ def run_container(
     volumes: Optional[Dict[str, str]] = None,
     args: list = None,
     detach: bool = False,
+    env: Dict[str, str] = None,
 ) -> str:
     """
     Run a container in the specified pod.
@@ -30,6 +31,10 @@ def run_container(
     if volumes:
         for host_path, container_path in volumes.items():
             cmd += ["--volume", f"{host_path}:{container_path}"]
+
+    if env:
+        for key, value in env.items():
+            cmd += ["--env", f"{key}={value}"]
 
     if detach:
         cmd.append("-d")
