@@ -16,6 +16,7 @@ def plot_y_per_x_per_plot(data, xlabel, ylabel, file, log=False):
                 label=label)
 
     plt.legend()
+    plt.ylim(bottom=0)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.yscale('log')

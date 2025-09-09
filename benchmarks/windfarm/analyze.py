@@ -36,6 +36,7 @@ pivot_duration = df_all.pivot(index="query_file", columns="engine", values="dura
 pivot_duration.plot(kind="bar", figsize=(12, 6))
 plt.ylabel("Duration (seconds)")
 plt.yscale('log')
+plt.ylim(bottom=0)
 plt.title("Query Execution Time")
 plt.xticks(rotation=45, ha="right")
 plt.tight_layout()
