@@ -1,17 +1,21 @@
 """
 Configuration loader and validator for SPARQL Bencher using pydantic.
 """
+
 import yaml
 from pydantic import BaseModel, ValidationError, field_validator, model_validator
 from typing import List, Optional
+
 
 class BuildConfig(BaseModel):
     context: str
     args: Optional[List[str]] = None
 
+
 class EngineRunConfig(BaseModel):
     args: Optional[List[str]] = None
     env: Optional[dict[str, str]] = None
+
 
 class EngineConfig(BaseModel):
     name: str
@@ -27,12 +31,16 @@ class EngineConfig(BaseModel):
     @model_validator(mode="after")
     def check_image_or_build(self):
         if (self.image is None) == (self.build is None):
-            raise ValueError('Exactly one of image or build can be specified for EngineConfig')
+            raise ValueError(
+                "Exactly one of image or build can be specified for EngineConfig"
+            )
         return self
+
 
 class UseCaseConfig(BaseModel):
     name: str
     command_args: List[str]
+
 
 class BenchmarkConfig(BaseModel):
     name: str
@@ -44,8 +52,11 @@ class BenchmarkConfig(BaseModel):
     @model_validator(mode="after")
     def check_image_or_build(self):
         if (self.image is None) == (self.build is None):
-            raise ValueError('Exactly one of image or build must be specified for BenchmarkConfig')
+            raise ValueError(
+                "Exactly one of image or build must be specified for BenchmarkConfig"
+            )
         return self
+
 
 class BencherConfig(BaseModel):
     engines: List[EngineConfig]
@@ -64,11 +75,14 @@ class BencherConfig(BaseModel):
                 duplicates.add(benchmark.name)
             names.add(benchmark.name)
         if duplicates:
-            raise ValueError(f"Duplicate engine/benchmark names found: {', '.join(duplicates)}")
+            raise ValueError(
+                f"Duplicate engine/benchmark names found: {', '.join(duplicates)}"
+            )
         return self
 
+
 def load_config(path: str) -> BencherConfig:
-    with open(path, 'r') as f:
+    with open(path, "r") as f:
         data = yaml.safe_load(f)
     try:
         return BencherConfig(**data)

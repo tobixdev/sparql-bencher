@@ -27,9 +27,12 @@ while time.time() < warmup_end:
         with open(qf, "r") as f:
             query = f.read()
         params = {"query": query}
-        requests.get(query_url, params=params, headers={
-            "Accept": "application/sparql-results+json"
-        }, timeout=60)
+        requests.get(
+            query_url,
+            params=params,
+            headers={"Accept": "application/sparql-results+json"},
+            timeout=60,
+        )
         if time.time() >= warmup_end:
             break
 print("Warmup complete.")
@@ -48,9 +51,12 @@ with open(results_file, "w", newline="") as rf:
         params = {"query": query}
 
         start_time = time.time()
-        response = requests.get(query_url, params=params, headers={
-            "Accept": "application/sparql-results+json"
-        }, timeout=300)
+        response = requests.get(
+            query_url,
+            params=params,
+            headers={"Accept": "application/sparql-results+json"},
+            timeout=300,
+        )
         elapsed = time.time() - start_time
 
         try:
@@ -59,5 +65,7 @@ with open(results_file, "w", newline="") as rf:
         except json.JSONDecodeError:
             num_results = 0
 
-        writer.writerow([Path(qf).name.replace(".sparql", ""), f"{elapsed:.3f}", num_results])
+        writer.writerow(
+            [Path(qf).name.replace(".sparql", ""), f"{elapsed:.3f}", num_results]
+        )
         print(f"Total: {elapsed:.3f}s | Results: {num_results}")

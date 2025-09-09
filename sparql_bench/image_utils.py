@@ -7,32 +7,38 @@ import yaml
 import hashlib
 from .command_runner import CommandRunner
 
-CACHE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'work', 'cache.yml')
+CACHE_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), "work", "cache.yml"
+)
 
 # Instantiate a global command runner for this module
 command_runner = CommandRunner()
 
+
 def _load_cache():
     if not os.path.exists(CACHE_PATH):
         return {}
-    with open(CACHE_PATH, 'r') as f:
+    with open(CACHE_PATH, "r") as f:
         try:
             return yaml.safe_load(f) or {}
         except Exception:
             return {}
 
+
 def _save_cache(cache):
     try:
-        with open(CACHE_PATH, 'w') as f:
+        with open(CACHE_PATH, "w") as f:
             yaml.safe_dump(cache, f)
         logging.info(f"Cache saved to {CACHE_PATH} with keys: {list(cache.keys())}")
     except Exception as e:
         logging.error(f"Failed to save cache to {CACHE_PATH}: {e}")
 
+
 def _config_hash(config) -> str:
     # Deterministically hash the config dict
-    config_bytes = yaml.safe_dump(config, sort_keys=True).encode('utf-8')
+    config_bytes = yaml.safe_dump(config, sort_keys=True).encode("utf-8")
     return hashlib.sha256(config_bytes).hexdigest()
+
 
 def clear_image_cache():
     """
@@ -44,6 +50,7 @@ def clear_image_cache():
     else:
         logging.info("No cache file to clear.")
 
+
 def get_cached_image_id(name, config):
     """
     Returns the cached image id for the given name and config, or None if not cached or hash mismatch.
@@ -51,16 +58,18 @@ def get_cached_image_id(name, config):
     cache = _load_cache()
     h = _config_hash(config)
     entry = cache.get(name)
-    if entry and entry.get('hash') == h:
-        return entry.get('image_id')
+    if entry and entry.get("hash") == h:
+        return entry.get("image_id")
     return None
+
 
 def set_cached_image_id(name, config, image_id):
     cache = _load_cache()
     h = _config_hash(config)
-    cache[name] = {'hash': h, 'image_id': image_id}
+    cache[name] = {"hash": h, "image_id": image_id}
     logging.info(f"Setting cache for {name}: hash={h}, image_id={image_id}")
     _save_cache(cache)
+
 
 def pull_image(name: str, image: str) -> str:
     """
@@ -68,7 +77,7 @@ def pull_image(name: str, image: str) -> str:
     Returns the image name.
     """
 
-    cached_id = get_cached_image_id(name, { image: image })
+    cached_id = get_cached_image_id(name, {image: image})
     if cached_id:
         logging.info(f"Using cached image id for {name}: {cached_id}")
         return cached_id
@@ -79,11 +88,12 @@ def pull_image(name: str, image: str) -> str:
     try:
         command_runner.run(cmd, check=True)
         logging.info("Image pulled successfully.")
-        set_cached_image_id(name, { image: image }, image)
+        set_cached_image_id(name, {image: image}, image)
         return image
     except subprocess.CalledProcessError as e:
         logging.error(f"Image pull failed: {e}")
         raise
+
 
 def build_image(name: str, build_config: BuildConfig) -> str:
     """
@@ -91,7 +101,11 @@ def build_image(name: str, build_config: BuildConfig) -> str:
     Uses a cache to avoid rebuilding if possible.
     Returns the image tag or ID.
     """
-    config_dict = build_config.model_dump() if hasattr(build_config, 'model_dump') else build_config.__dict__
+    config_dict = (
+        build_config.model_dump()
+        if hasattr(build_config, "model_dump")
+        else build_config.__dict__
+    )
 
     cached_id = get_cached_image_id(name, config_dict)
     if cached_id:
@@ -101,7 +115,7 @@ def build_image(name: str, build_config: BuildConfig) -> str:
     cmd = ["podman"]
     cmd += ["build"]
     cmd += ["--no-cache"]
-    
+
     if build_config.args:
         for arg in build_config.args:
             cmd += ["--build-arg", arg]
@@ -110,13 +124,14 @@ def build_image(name: str, build_config: BuildConfig) -> str:
     try:
         result = command_runner.run(cmd, check=True, capture_output=True, text=True)
         logging.info("Image built successfully.")
-        
+
         image_id = result.stdout.splitlines()[-1].strip()
         set_cached_image_id(name, config_dict, image_id)
         return image_id
     except subprocess.CalledProcessError as e:
         logging.error(f"Image build failed: {e}\n{e.stderr}")
         raise
+
 
 def obtain_image(name, image_config):
     if image_config.image:
@@ -126,6 +141,7 @@ def obtain_image(name, image_config):
     else:
         raise ValueError(f"'{image_config.name}' has neither image nor build config.")
 
+
 def check_unique_names(config):
     """
     Checks that all engine and benchmark names are unique in the config.
@@ -133,15 +149,18 @@ def check_unique_names(config):
     """
     names = set()
     duplicates = set()
-    for section in (getattr(config, 'engines', []), getattr(config, 'benchmarks', [])):
+    for section in (getattr(config, "engines", []), getattr(config, "benchmarks", [])):
         for item in section:
-            name = getattr(item, 'name', None)
+            name = getattr(item, "name", None)
             if name:
                 if name in names:
                     duplicates.add(name)
                 names.add(name)
     if duplicates:
-        raise ValueError(f"Duplicate engine/benchmark names found: {', '.join(duplicates)}")
+        raise ValueError(
+            f"Duplicate engine/benchmark names found: {', '.join(duplicates)}"
+        )
+
 
 def create_pod(pod_name: str, port: Optional[int] = None) -> None:
     """
@@ -157,6 +176,7 @@ def create_pod(pod_name: str, port: Optional[int] = None) -> None:
     except subprocess.CalledProcessError as e:
         logging.error(f"Pod creation failed: {e}")
         raise
+
 
 def remove_pod(pod_name: str) -> None:
     """

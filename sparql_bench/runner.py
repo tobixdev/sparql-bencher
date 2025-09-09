@@ -32,7 +32,7 @@ def run_benchmarks(config: BencherConfig):
 
         for use_case in benchmark.use_cases:
             logging.info(f"\n=== Running {benchmark.name} on {engine.name} ===")
-            
+
             for engine in config.engines:
                 logging.info(f"Running use case: {use_case.name}")
                 engine_image = engine_images[engine.name]
@@ -46,7 +46,6 @@ def run_benchmarks(config: BencherConfig):
                     # Start engine container
                     logging.info(f"Starting engine container for {engine.name}")
 
-
                     run_container(
                         image=engine_image,
                         pod_name=pod_name,
@@ -58,7 +57,9 @@ def run_benchmarks(config: BencherConfig):
                     time.sleep(engine.boot_time_s)
 
                     # Engine-specific setup step
-                    setup_script = os.path.join(os.path.dirname(__file__), "..", "engines", "setup.sh")
+                    setup_script = os.path.join(
+                        os.path.dirname(__file__), "..", "engines", "setup.sh"
+                    )
                     if os.path.isfile(setup_script):
                         command_runner = CommandRunner()
                         command_runner.run([setup_script, engine.name], check=True)
@@ -90,14 +91,18 @@ def run_benchmarks(config: BencherConfig):
                     # Define results directory for this benchmark/usecase/engine
                     results_dir = os.path.abspath(
                         os.path.join(
-                            os.path.dirname(__file__), "..", "work", "results", use_case.name
+                            os.path.dirname(__file__),
+                            "..",
+                            "work",
+                            "results",
+                            use_case.name,
                         )
                     )
                     os.makedirs(results_dir, exist_ok=True)
                     run_container(
                         image=benchmark_image,
                         pod_name=pod_name,
-                        volumes = {results_dir: "/results"},
+                        volumes={results_dir: "/results"},
                         args=[
                             "execute",
                             engine.name,
@@ -114,12 +119,11 @@ def run_benchmarks(config: BencherConfig):
                 finally:
                     logging.info(f"Cleaning up pod '{pod_name}'")
                     remove_pod(pod_name)
-                
-                    
+
             # Analyze results of the use case
             run_container(
                 image=benchmark_image,
-                volumes = {results_dir: "/results"},
+                volumes={results_dir: "/results"},
                 args=[
                     "analyze",
                     *use_case.command_args,

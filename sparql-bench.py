@@ -9,6 +9,7 @@ import shutil
 from sparql_bench.config import load_config
 from sparql_bench.runner import run_benchmarks
 
+
 def main():
     if len(sys.argv) < 2:
         config_path = "default.yaml"
@@ -16,17 +17,18 @@ def main():
     else:
         config_path = sys.argv[1]
     config = load_config(config_path)
-    
+
     if not os.path.exists("work"):
         os.mkdir("work")
-    
+
     if os.path.exists("work/command.log"):
         os.remove("work/command.log")
-    
+
     if os.path.exists("work/results"):
-        shutil.rmtree('work/results')
-        
+        shutil.rmtree("work/results")
+
     run_benchmarks(config)
+
 
 if __name__ == "__main__":
     main()
