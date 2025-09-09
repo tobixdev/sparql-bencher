@@ -1,2 +1,0 @@
-pyyaml
-pydantic=2.11
