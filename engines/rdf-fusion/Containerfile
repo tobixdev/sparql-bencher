@@ -1,6 +1,6 @@
 ARG BRANCH=main
 
-FROM docker.io/rust:1.88-bookworm AS builder
+FROM docker.io/rust:1.89-bookworm AS builder
 ARG BRANCH
 RUN apt update
 RUN apt install build-essential cmake -y
@@ -11,4 +11,4 @@ FROM gcr.io/distroless/cc-debian12
 COPY --from=builder /rdf-fusion/target/release/rdf-fusion /usr/local/bin/rdf-fusion
 
 ENTRYPOINT [ "/usr/local/bin/rdf-fusion" ]
-CMD [ "serve", "--bind", "0.0.0.0:7878" ]
+CMD [ "--memory-limit", "8192", "serve", "--bind", "0.0.0.0:7878" ]
