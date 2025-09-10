@@ -1,5 +1,5 @@
 engines:
-  - name: rdf-fusion-0.1.0 (target_partitions=1)
+  - name: rdf-fusion-0.1.0_tp_1
     build:
       context: ./engines/rdf-fusion/
     run:
@@ -10,7 +10,7 @@ engines:
     update_url: "http://localhost:7878/repositories/default/update"
     upload_url: "http://localhost:7878/repositories/default/data"
 
-  - name: rdf-fusion-0.1.0 (target_partitions=24)
+  - name: rdf-fusion-0.1.0_tp_24
     build:
       context: ./engines/rdf-fusion/
     run:
@@ -44,14 +44,6 @@ engines:
     query_url: "http://localhost:8080/rdf4j-server/repositories/bench"
     update_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
     upload_url: "http://localhost:8080/rdf4j-server/repositories/bench/statements"
-  
-  - name: oxigraph-0.4.11
-    image: ghcr.io/oxigraph/oxigraph:0.4.11
-    run:
-      args: ["serve", "--bind", "0.0.0.0:7878"]
-    query_url: "http://localhost:7878/query"
-    update_url: "http://localhost:7878/update"
-    upload_url: "http://localhost:7878/store?no_transaction"
 
 benchmarks:
   - name: BSBM Explore (products=25_000, number_of_clients=24)
@@ -64,15 +56,15 @@ benchmarks:
         command_args:
           ["explore", "24"]
 
-  - name: BSBM Business Intelligence (products=5_000, number_of_clients=24)
+  - name: BSBM Business Intelligence (products=5000, number_of_clients=12)
     build:
       context: ./benchmarks/bsbm/
       args:
         - NUMBER_OF_PRODUCTS=5000
     use_cases:
-      - name: business-intelligence-24
+      - name: business-intelligence-12
         command_args:
-          ["business-intelligence", "24"]
+          ["business-intelligence", "12"]
 
   - name: Wind Farm (turbines=16)
     build:
