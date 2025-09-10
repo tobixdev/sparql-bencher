@@ -1,21 +1,10 @@
 engines:
-  - name: rdf-fusion-0.1.0_tp_1
+  - name: rdf-fusion-0.1.0
     build:
       context: ./engines/rdf-fusion/
     run:
       env:
         DATAFUSION_EXECUTION_TARGET_PARTITIONS: "1"
-      args: ["serve", "--bind", "0.0.0.0:7878"]
-    query_url: "http://localhost:7878/repositories/default/query"
-    update_url: "http://localhost:7878/repositories/default/update"
-    upload_url: "http://localhost:7878/repositories/default/data"
-
-  - name: rdf-fusion-0.1.0_tp_24
-    build:
-      context: ./engines/rdf-fusion/
-    run:
-      env:
-        DATAFUSION_EXECUTION_TARGET_PARTITIONS: "24"
       args: ["serve", "--bind", "0.0.0.0:7878"]
     query_url: "http://localhost:7878/repositories/default/query"
     update_url: "http://localhost:7878/repositories/default/update"
@@ -56,7 +45,7 @@ benchmarks:
         command_args:
           ["explore", "24"]
 
-  - name: BSBM Business Intelligence (products=5000, number_of_clients=12)
+  - name: BSBM Business Intelligence (products=5_000, number_of_clients=12)
     build:
       context: ./benchmarks/bsbm/
       args:
