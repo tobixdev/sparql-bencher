@@ -2,6 +2,7 @@ import subprocess
 import shlex
 from pathlib import Path
 
+
 class CommandRunner:
     def __init__(self, log_path="work/command.log"):
         self.log_path = Path(log_path)

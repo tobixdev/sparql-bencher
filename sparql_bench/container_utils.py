@@ -19,7 +19,7 @@ def run_container(
     Run a container in the specified pod.
     """
     cmd = ["podman", "run", "--rm"]
-    
+
     if pod_name:
         cmd += ["--pod", pod_name]
 
@@ -27,7 +27,7 @@ def run_container(
         cmd += ["--name", name]
     else:
         name = f"{image}-container"
-    
+
     if volumes:
         for host_path, container_path in volumes.items():
             cmd += ["--volume", f"{host_path}:{container_path}"]
