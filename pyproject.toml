@@ -1,9 +1,12 @@
 [project]
 name = "sparql-bencher"
 version = "0.1.0"
-description = ""
+description = "Compares RDF Fusion to other SPARQL Engines"
+license = "Apache-2.0"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    { name = "Tobias Schwarzinger", email = "tobias.schwarzinger@tuwien.ac.at" },
+    { name = "Max Thoma", email = "max.thoma@tuwien.ac.at" }
+
 ]
 readme = "README.md"
 requires-python = ">=3.13"
