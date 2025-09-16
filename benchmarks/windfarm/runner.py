@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import requests
-import time
-import glob
-import sys
-import json
 import csv
+import glob
+import json
+import sys
+import time
 from pathlib import Path
+
+import requests
 
 if len(sys.argv) != 3:
     print(f"Usage: {sys.argv[0]} RESULTS_FILE QUERY_URL")
