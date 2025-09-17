@@ -1,4 +1,5 @@
-# Based on Oxigraph's analysis script: https://github.com/oxigraph/oxigraph/blob/main/bench/bsbm-plot.py
+# Based on Oxigraph's analysis script:
+# https://github.com/oxigraph/oxigraph/blob/main/bench/bsbm-plot.py
 import sys
 import xml.etree.ElementTree as ET
 from collections import defaultdict
@@ -29,7 +30,7 @@ def plot_y_per_x_per_plot(data, xlabel, ylabel, file, log=True):
                 va="bottom",
                 fontsize=8,
                 rotation=45,
-                bbox=dict(facecolor="white", edgecolor="none", alpha=0.7, pad=1),
+                bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.7, "pad": 1},
             )
 
     plt.legend()

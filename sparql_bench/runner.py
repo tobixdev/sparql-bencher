@@ -3,13 +3,14 @@ Orchestrator for running SPARQL engine benchmarks using Podman.
 """
 
 import logging
-import random
-from .config import BencherConfig
-from .image_utils import create_pod, obtain_image, remove_pod
-from .container_utils import run_container
-from .command_runner import CommandRunner
-import time
 import os
+import random
+import time
+
+from .command_runner import CommandRunner
+from .config import BencherConfig
+from .container_utils import run_container
+from .image_utils import create_pod, obtain_image, remove_pod
 
 
 def run_benchmarks(config: BencherConfig):

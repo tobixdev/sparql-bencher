@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-import pandas as pd
-import matplotlib.pyplot as plt
 import sys
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} RESULTS_DIR")

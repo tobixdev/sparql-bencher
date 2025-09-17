@@ -2,9 +2,10 @@
 Configuration loader and validator for SPARQL Bencher using pydantic.
 """
 
-import yaml
-from pydantic import BaseModel, ValidationError, field_validator, model_validator
 from typing import List, Optional
+
+import yaml
+from pydantic import BaseModel, ValidationError, model_validator
 
 
 class BuildConfig(BaseModel):

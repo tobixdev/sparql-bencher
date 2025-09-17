@@ -1,11 +1,13 @@
-import subprocess
-import logging
-from typing import Optional
-from .config import BuildConfig
-import os
-import yaml
 import hashlib
+import logging
+import os
+import subprocess
+from typing import Optional
+
+import yaml
+
 from .command_runner import CommandRunner
+from .config import BuildConfig
 
 CACHE_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), "work", "cache.yml"
@@ -53,7 +55,8 @@ def clear_image_cache():
 
 def get_cached_image_id(name, config):
     """
-    Returns the cached image id for the given name and config, or None if not cached or hash mismatch.
+    Returns the cached image id for the given name and config,
+    or None if not cached or hash mismatch.
     """
     cache = _load_cache()
     h = _config_hash(config)
